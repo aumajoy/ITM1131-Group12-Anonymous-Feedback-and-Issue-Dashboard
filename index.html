@@ -1,232 +1,177 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Anonymous Feedback and Issue Dashboard for Muni University students, staff, quality-assurance teams and management.">
-      
-      
-    <title>Anonymous Feedback and Issue Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Anonymous feedback and issue dashboard for Muni University">
+  <title>Anonymous Feedback and Issue Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
 
-    <header class="site-header">
-      <div class="container header-inner">
-        <div class="brand">
-          <img
-            src="muni-logo.jpeg"
-            alt="Muni University Logo"
-            class="brand-logo" Loading="lazy">
-          <div>
-            <p class="brand-title">Feedback &amp; Issue Dashboard</p>
-            <p class="brand-sub">ITM 1131 &middot; Group 12</p>
-          </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="muni-logo.jpeg" alt="Muni University Logo" class="brand-logo">
+        <div>
+          <p class="brand-title">Feedback &amp; Issue Dashboard</p>
+          <p class="brand-sub">ITM 1131 &middot; Group 12</p>
         </div>
-        <nav aria-label="Main navigation">
-          <ul class="nav-list">
-            <li><a href="#overview" class="nav-link">Overview</a></li>
-            <li><a href="#board" class="nav-link">Feedback board</a></li>
-            <li><a href="#submit" class="nav-link">Submit feedback</a></li>
-          </ul>
-        </nav>
       </div>
-    </header>
+      <nav aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#overview">Overview</a></li>
+          <li><a class="nav-link" href="#board">Feedback board</a></li>
+          <li><a class="nav-link" href="#submit">Submit feedback</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <main id="main" class="container">
-      <!-- Section 1: Overview -->
-      <section id="overview" class="panel" aria-labelledby="overview-title">
-        <h1 id="overview-title">Anonymous Feedback and Issue Dashboard</h1>
-        <p class="lead">
-          Share concerns and ideas without revealing who you are.
-          Quality-assurance teams and management can track what is open, under
-          review and resolved.
-        </p>
+  <main id="main" class="container">
+    <section id="overview" class="panel" aria-labelledby="overview-title">
+      <h1 id="overview-title">Anonymous Feedback and Issue Dashboard</h1>
+      <p class="lead">Share concerns and ideas without revealing who you are. Quality-assurance teams and management can track what is open, under review and resolved.</p>
+      <div id="summary-cards" class="stat-grid" aria-live="polite"></div>
 
-        <div id="summary-cards" class="stat-grid" aria-live="polite"></div>
+      <h2>Ratings and issues by category</h2>
+      <div class="table-wrap">
+        <table id="category-table">
+          <caption class="sr-only">Feedback totals, open issues and average ratings by category</caption>
+          <thead>
+            <tr><th scope="col">Category</th><th scope="col">Total</th><th scope="col">Open</th><th scope="col">Average rating</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
 
-        <h2>Ratings and issues by category</h2>
-        <div class="table-wrap">
-          <table id="category-table">
-            <caption class="sr-only">
-              Number of feedback items, open issues and average rating for each
-              category
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Category</th>
-                <th scope="col">Total</th>
-                <th scope="col">Open</th>
-                <th scope="col">Average rating</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+    <section id="board" class="panel" aria-labelledby="board-title">
+      <h2 id="board-title">Feedback board</h2>
+      <p class="lead">Search and filter anonymised feedback. No names, emails or phone numbers are stored or shown.</p>
+
+      <form id="filter-form" class="filter-grid" role="search" aria-label="Filter feedback" novalidate>
+        <div class="field field-wide">
+          <label for="search">Search feedback</label>
+          <input type="search" id="search" name="search" placeholder="e.g. wi-fi, library, hostel">
         </div>
-      </section>
+        <div class="field">
+          <label for="filter-category">Category</label>
+          <select id="filter-category" name="category"></select>
+        </div>
+        <div class="field">
+          <label for="filter-audience">Audience</label>
+          <select id="filter-audience" name="audience"></select>
+        </div>
+        <div class="field">
+          <label for="filter-status">Status</label>
+          <select id="filter-status" name="status"></select>
+        </div>
+        <div class="field">
+          <label for="sort-by">Sort by</label>
+          <select id="sort-by" name="sort-by">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="rating-high">Highest rating</option>
+            <option value="rating-low">Lowest rating</option>
+          </select>
+        </div>
+        <div class="field field-actions">
+          <button type="button" id="reset-filters" class="btn btn-secondary">Reset filters</button>
+        </div>
+      </form>
 
-      <!-- Section 2: Feedback board -->
-       
-      <section id="board" class="panel" aria-labelledby="board-title">
-        <h2 id="board-title">Feedback board</h2>
-        <p class="lead">
-          Search and filter anonymised feedback. No names, emails or phone
-          numbers are stored or shown.
-        </p>
+      <div class="board-toolbar">
+        <p id="result-count" class="result-count" role="status" aria-live="polite"></p>
+        <label class="check-inline" for="staff-mode">
+          <input type="checkbox" id="staff-mode" name="staff-mode" aria-describedby="staff-mode-help">
+          <span>Staff view (allow status updates)</span>
+        </label>
+      </div>
+      <span id="staff-mode-help" class="sr-only">Demonstration-only status updates; no authentication is provided.</span>
 
-        <form id="filter-form" class="filter-grid" role="search" aria-label="Filter feedback"
-         novalidate>
+      <div id="feedback-list" class="card-grid"></div>
+      <div id="empty-state" class="empty-state" hidden>
+        <p class="empty-title">No feedback matches your filters.</p>
+        <p>Try a different search word or reset the filters.</p>
+      </div>
+    </section>
 
-          <div class="field field-wide">
-            <label for="search">Search feedback</label>
-            <input type="search" id="search" name="search" placeholder="e.g. wi-fi, library, hostel">
+    <section id="submit" class="panel" aria-labelledby="submit-title">
+      <h2 id="submit-title">Submit anonymous feedback</h2>
+      <p class="lead">Do not include your name, registration number, email or phone number. We check your message to protect your identity.</p>
+      <div id="form-message" class="message" role="status" aria-live="polite" hidden></div>
+
+      <form id="feedback-form" class="form-grid" novalidate>
+        <div class="field">
+          <label for="category">Category <span class="req" aria-hidden="true">*</span></label>
+          <select id="category" name="category" required aria-describedby="category-error">
+            <option value="">Choose a category</option>
+            <option value="Academics">Academics</option>
+            <option value="Facilities">Facilities</option>
+            <option value="ICT and Wi-Fi">ICT and Wi-Fi</option>
+            <option value="Library">Library</option>
+            <option value="Hostels and Welfare">Hostels and Welfare</option>
+            <option value="Administration">Administration</option>
+          </select>
+          <p class="error-text" id="category-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="audience">I am a <span class="req" aria-hidden="true">*</span></label>
+          <select id="audience" name="audience" required aria-describedby="audience-error">
+            <option value="">Choose who you are</option>
+            <option value="Student">Student</option>
+            <option value="Lecturer">Lecturer</option>
+            <option value="Administrative staff">Administrative staff</option>
+            <option value="Library staff">Library staff</option>
+          </select>
+          <p class="error-text" id="audience-error" hidden></p>
+        </div>
+
+        <div class="field field-full">
+          <label for="message">Your message <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="message" name="message" rows="5" maxlength="500" required aria-describedby="message-help message-error" placeholder="Describe the issue or idea (at least 20 characters)"></textarea>
+          <p id="message-help" class="help-text"><span id="char-count">0</span> / 500 characters</p>
+          <p class="error-text" id="message-error" hidden></p>
+        </div>
+
+        <fieldset class="field field-full rating-set">
+          <legend>Rating (optional)</legend>
+          <div class="rating-options">
+            <label><input type="radio" name="rating" value="1">1</label>
+            <label><input type="radio" name="rating" value="2">2</label>
+            <label><input type="radio" name="rating" value="3">3</label>
+            <label><input type="radio" name="rating" value="4">4</label>
+            <label><input type="radio" name="rating" value="5">5</label>
+            <button type="button" id="clear-rating" class="btn btn-link">Clear</button>
           </div>
+          <p class="help-text">1 = very poor, 5 = excellent</p>
+        </fieldset>
 
-          <div class="field">
-            <label for="filter-category">Category</label>
-            <select id="filter-category" name="category"></select>
-          </div>
-
-          <div class="field">
-            <label for="filter-audience">Audience</label>
-            <select id="filter-audience" name="audience"></select>
-          </div>
-
-          <div class="field">
-            <label for="filter-status">Status</label>
-            <select id="filter-status" name="status"></select>
-          </div>
-
-          <div class="field">
-            <label for="sort-by">Sort by</label>
-            <select id="sort-by">
-              <option value="newest">Newest first</option>
-              <option value="oldest">Oldest first</option>
-              <option value="rating-high">Highest rating</option>
-              <option value="rating-low">Lowest rating</option>
-            </select>
-          </div>
-
-          <div class="field field-actions">
-            <button type="button" id="reset-filters" class="btn btn-secondary">
-              Reset filters
-            </button>
-          </div>
-        </form>
-
-        <div class="board-toolbar">
-          <p
-            id="result-count" class="result-count" role="status" aria-live="polite"></p>
-          <label class="check-inline" for="staff-mode">
-            <input type="checkbox" id="staff-mode" aria-describedby="staff-mode-help" name="staff-mode">
-            <span>Staff view (allow status updates)</span>
+        <div class="field field-full">
+          <label class="check-inline" for="confirm">
+            <input type="checkbox" id="confirm" name="confirm" required aria-describedby="confirm-error">
+            <span>I confirm my message contains no personal information.</span>
           </label>
+          <p class="error-text" id="confirm-error" hidden></p>
         </div>
 
-        <div id="feedback-list" class="card-grid"></div>
-        <div id="empty-state" class="empty-state" hidden>
-          <p class="empty-title">No feedback matches your filters.</p>
-          <p>Try a different search word or reset the filters.</p>
+        <div class="field field-full">
+          <button type="submit" class="btn btn-primary">Submit feedback</button>
         </div>
-      </section>
+      </form>
+    </section>
+  </main>
 
-      <!-- Section 3: Submit -->
-      <section id="submit" class="panel" aria-labelledby="submit-title">
-        <h2 id="submit-title">Submit anonymous feedback</h2>
-        <p class="lead">
-          Do not include your name, registration number, email or phone number.
-          We check your message to protect your identity.
-        </p>
+  <footer class="site-footer">
+    <div class="container">
+      <p>ITM 1131 Web Application Development &middot; Group 12 &middot; Sample data is stored only in your browser.</p>
+    </div>
+  </footer>
 
-        <div id="form-message" class="message" role="status" aria-live="polite" hidden>
-
-        </div>
-
-        <form id="feedback-form" class="form-grid" novalidate>
-          <div class="field">
-            <label for="category"
-              >Category <span class="req" aria-hidden="true">*</span></label
-            >
-            <select  id="category"  name="category" required aria-describedby="category-error">
-              <option value="">--Select a category--</option>
-              <option value="general">General Questions</option>
-              <option value="symptoms">Symptoms</option>
-              <option value="prevention">prevention</option>
-            </select>
-            <p class="error-text" id="category-error" hidden></p>
-          </div>
-
-          <div class="field">
-            <label for="audience"
-              >I am a <span class="req" aria-hidden="true">*</span></label
-            >
-            <select id="audience" required aria-describedby="audience-error">
-              <option value="">-- Select who you are--</option>
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="visitor">Visitor</option>
-            </select>
-            <p class="error-text" id="audience-error" hidden></p>
-          </div>
-
-          <div class="field field-full">
-            <label for="message"
-              >Your message <span class="req" aria-hidden="true">*</span></label
-            >
-            <textarea id="message" rows="5" maxlength="500" required aria-describedby="message-help message-error" 
-              placeholder="Describe the issue or idea (at least 20 characters)"></textarea>
-            <p id="message-help" class="help-text">
-              <span id="char-count">0</span> / 500 characters
-            </p>
-            <p class="error-text" id="message-error" hidden></p>
-          </div>
-
-          <fieldset class="field field-full rating-set">
-            <legend>Rating (optional)</legend>
-            <div class="rating-options">
-              <label><input type="radio" name="rating" value="1">1</label>
-              <label><input type="radio" name="rating" value="2">2</label>
-              <label><input type="radio" name="rating" value="3">3</label>
-              <label><input type="radio" name="rating" value="4">4</label>
-              <label><input type="radio" name="rating" value="5">5</label>
-              <button type="button" id="clear-rating" class="btn btn-link">
-                Clear
-              </button>
-            </div>
-            <p class="help-text">1 = very poor, 5 = excellent</p>
-          </fieldset>
-
-          <div class="field field-full">
-            <label class="check-inline" for="confirm">
-              <input
-                type="checkbox"
-                id="confirm"
-                required
-                aria-describedby="confirm-error">
-              <span>I confirm my message contains no personal information.</span>
-            </label>
-            <p class="error-text" id="confirm-error" hidden></p>
-          </div>
-
-          <div class="field field-full">
-            <button type="submit" class="btn btn-primary">
-              Submit feedback
-            </button>
-          </div>
-        </form>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>
-          ITM 1131 Web Application Development &middot; Group 12 &middot; Sample
-          data is stored only in your browser.
-        </p>
-      </div>
-    </footer>
-
-    <script src="script.js"></script>
-  </body>
+  <noscript><p class="noscript-message">JavaScript is required to use this dashboard.</p></noscript>
+  <script src="script.js"></script>
+</body>
 </html>
