@@ -497,7 +497,7 @@ textarea {
     grid-template-columns: repeat(3, 1fr);
   }
   .filter-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   }
   .field-wide,
   .field-full {
